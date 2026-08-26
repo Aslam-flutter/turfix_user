@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 class AppConstants {
   static const Color primary = Color(0xff16A34A);
@@ -8,4 +8,8 @@ class AppConstants {
   static const Color gray = Color(0xFF6B7280);
   static const String appName = "Turfix";
   static const String currency = "₹";
+
+  static double kHeight(BuildContext context) {
+    return MediaQuery.of(context).size.height * 0.8;
+  }
 }

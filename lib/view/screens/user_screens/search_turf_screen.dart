@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:turfix/core/constants/app_constants.dart';
 import 'package:turfix/view/screens/user_screens/turf_details_screen.dart';
@@ -152,111 +153,132 @@ class SearchTurfScreen extends StatelessWidget {
             sh(20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 4,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => TurfDetailsScreen(),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(5),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade200,
-                                spreadRadius: 1.5,
-                                blurRadius: 1.5,
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  'https://playo.gumlet.io/GAMECITYTURF20240405183049483875/GameCityTurf1763374816361.jpg',
-                                  height: 100,
-                                  width: 100,
-                                  fit: BoxFit.cover,
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('turfs')
+                    .snapshots(),
+                builder: (context, asyncSnapshot) {
+                  if (asyncSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return SizedBox(child: CircularProgressIndicator());
+                  }
+                  final turfs = asyncSnapshot.data!.docs;
+
+                  if (turfs.isEmpty) {
+                    return SizedBox(child: Text('No turf detaiis found'));
+                  }
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: turfs.length,
+                    itemBuilder: (context, index) {
+                      final turf = turfs[index];
+                      return Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      TurfDetailsScreen(turfDetails: turf),
                                 ),
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(5),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.shade200,
+                                    spreadRadius: 1.5,
+                                    blurRadius: 1.5,
+                                  ),
+                                ],
                               ),
-                              sw(10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Green Field Arena',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              child: Row(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(
+                                      'https://playo.gumlet.io/GAMECITYTURF20240405183049483875/GameCityTurf1763374816361.jpg',
+                                      height: 100,
+                                      width: 100,
+                                      fit: BoxFit.cover,
                                     ),
-                                    sh(6),
-                                    Text(
-                                      'Kozhikode, 2.5 km',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey.shade400,
-                                      ),
-                                    ),
-                                    sh(12),
-                                    Row(
+                                  ),
+                                  sw(10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Icon(Icons.star, color: Colors.amber),
                                         Text(
-                                          ' 4.6',
+                                          turf['turfName'],
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Spacer(),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: 6,
-                                            vertical: 2,
+                                        sh(6),
+                                        Text(
+                                          turf['location'],
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.grey.shade400,
                                           ),
-                                          decoration: BoxDecoration(
-                                            color: Colors.green.shade100,
-                                            borderRadius: BorderRadius.circular(
-                                              50,
+                                        ),
+                                        sh(12),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
                                             ),
-                                          ),
-                                          child: Text(
-                                            '₹1200/hr',
-                                            style: TextStyle(
-                                              color: AppConstants.darkGreen,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
+                                            Text(
+                                              ' ${turf['rating']}',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
+                                            Spacer(),
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 6,
+                                                vertical: 2,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: Colors.green.shade100,
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                              ),
+                                              child: Text(
+                                                '₹${turf['pricePerHour']}/hr',
+                                                style: TextStyle(
+                                                  color: AppConstants.darkGreen,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                      sh(10),
-                    ],
+                          sh(10),
+                        ],
+                      );
+                    },
                   );
                 },
               ),

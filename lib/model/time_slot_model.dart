@@ -1,17 +1,29 @@
-enum SlotStatus { available, booked, unavailable }
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class TimeSlotModel {
-  final String startTime;
-  final String endTime;
-  final String price;
-  final SlotStatus status;
-  bool isSelected;
+class SlotModel {
+  final String? id;
+  final DateTime startAt;
+  final DateTime endAt;
+  final double price;
+  final String status;
+  final String? bookingId;
 
-  TimeSlotModel({
-    required this.startTime,
-    required this.endTime,
+  SlotModel({
+    this.id,
+    required this.startAt,
+    required this.endAt,
     required this.price,
-    required this.status,
-    this.isSelected = false,
+    this.status = 'available',
+    this.bookingId,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'startAt': Timestamp.fromDate(startAt),
+      'endAt': Timestamp.fromDate(endAt),
+      'price': price,
+      'status': status,
+      'bookingId': bookingId,
+    };
+  }
 }

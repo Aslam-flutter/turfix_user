@@ -5,6 +5,7 @@ import 'package:turfix/firebase_options.dart';
 import 'package:turfix/view/auth/splash_screen.dart';
 import 'package:turfix/view_model/bookig_provider.dart';
 import 'package:turfix/view_model/common_provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

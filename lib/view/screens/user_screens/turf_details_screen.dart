@@ -1,303 +1,15 @@
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import 'package:turfix/view_model/common_provider.dart';
-// import 'package:turfix/widgets/custom_sized_box.dart';
-
-// class TurfDetailsScreen extends StatelessWidget {
-//   const TurfDetailsScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final provider = Provider.of<CommonProvider>(context);
-//     // provider.pickBookDate(context);
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       body: SafeArea(
-//         child: SingleChildScrollView(
-//           child: Column(
-//             children: [
-//               SizedBox(
-//                 height: 320,
-//                 child: Stack(
-//                   children: [
-//                     Container(
-//                       height: 80,
-//                       padding: EdgeInsets.all(6),
-//                       decoration: BoxDecoration(color: Colors.black),
-//                       child: Row(
-//                         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                         children: [
-//                           IconButton(
-//                             onPressed: () {},
-//                             icon: Icon(
-//                               Icons.arrow_back_ios,
-//                               color: Colors.white,
-//                             ),
-//                           ),
-//                           Text(
-//                             'Green Field Arena',
-//                             style: TextStyle(
-//                               fontSize: 18,
-//                               fontWeight: FontWeight.bold,
-//                               color: Colors.white,
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                     Positioned(
-//                       top: 54,
-//                       child: Padding(
-//                         padding: const EdgeInsets.all(12.0),
-//                         child: SizedBox(
-//                           width: MediaQuery.of(context).size.width * 0.95,
-//                           child: ClipRRect(
-//                             borderRadius: BorderRadius.circular(20),
-//                             child: Image.network(
-//                               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwq1O-qC-iZVN_4hkTobZRzKrsWYBbmqrrgls7NwcKUSzQuwJLvMC3xcU&s=10',
-//                               height: 250,
-//                               fit: BoxFit.cover,
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//               Padding(
-//                 padding: const EdgeInsets.symmetric(horizontal: 16),
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     SizedBox(height: 10),
-//                     Row(
-//                       children: [
-//                         Icon(Icons.star, color: Colors.amber),
-//                         Text(
-//                           ' 4.6',
-//                           style: TextStyle(
-//                             fontSize: 18,
-//                             fontWeight: FontWeight.bold,
-//                           ),
-//                         ),
-//                         Text(
-//                           ' (126 reviews)',
-//                           style: TextStyle(
-//                             fontSize: 16,
-//                             fontWeight: FontWeight.bold,
-//                             color: Colors.grey.shade500,
-//                           ),
-//                         ),
-//                         Spacer(),
-//                         Icon(Icons.location_on, color: Colors.grey.shade500),
-//                         Text(
-//                           '2.5 km',
-//                           style: TextStyle(
-//                             fontSize: 18,
-//                             color: Colors.grey.shade500,
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                     sh(10),
-//                     Text(
-//                       'Foodball - Outdoor',
-//                       style: TextStyle(
-//                         fontSize: 16,
-//                         fontWeight: FontWeight.bold,
-//                         color: Colors.grey.shade600,
-//                       ),
-//                     ),
-//                     sh(16),
-//                     Text(
-//                       'Facilities',
-//                       style: TextStyle(
-//                         fontSize: 18,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                     sh(10),
-//                     SizedBox(
-//                       height: 100,
-//                       child: ListView.builder(
-//                         scrollDirection: Axis.horizontal,
-//                         itemCount: 5,
-//                         itemBuilder: (context, index) {
-//                           return Row(
-//                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                             children: [
-//                               Column(
-//                                 children: [
-//                                   Container(
-//                                     padding: EdgeInsets.all(20),
-//                                     decoration: BoxDecoration(
-//                                       color: Colors.grey.shade100,
-//                                       borderRadius: BorderRadius.circular(16),
-//                                     ),
-//                                     child: Icon(Icons.local_parking),
-//                                   ),
-//                                   sh(6),
-//                                   Text('Parking'),
-//                                 ],
-//                               ),
-//                               sw(14),
-//                             ],
-//                           );
-//                         },
-//                       ),
-//                     ),
-//                     sh(16),
-//                     Text(
-//                       'Select Date',
-//                       style: TextStyle(
-//                         fontSize: 18,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                     sh(10),
-//                     InkWell(
-//                       onTap: () {
-//                         provider.pickBookDate(context);
-//                       },
-//                       child: Container(
-//                         height: 50,
-//                         padding: EdgeInsets.symmetric(
-//                           horizontal: 10,
-//                           vertical: 8,
-//                         ),
-//                         decoration: BoxDecoration(
-//                           color: Colors.white,
-//                           borderRadius: BorderRadius.circular(10),
-//                           border: Border.all(color: Colors.green.shade100),
-//                         ),
-//                         child: Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                           children: [
-//                             Text(
-//                               provider.bookDate.toString(),
-//                               style: TextStyle(
-//                                 fontSize: 16,
-//                                 fontWeight: FontWeight.bold,
-//                               ),
-//                             ),
-//                             Icon(Icons.calendar_month),
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-//                     sh(16),
-//                     Text(
-//                       'Select Time',
-//                       style: TextStyle(
-//                         fontSize: 18,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                     sh(10),
-//                     Wrap(
-//                       spacing: 10,
-//                       runSpacing: 10,
-//                       children: [
-//                         _selectTimeCard(
-//                           startingTime: '12:00 AM',
-//                           endingTime: '1:00 AM',
-//                           status: true,
-//                         ),
-//                         _selectTimeCard(
-//                           startingTime: '1:00 AM',
-//                           endingTime: '2:00 AM',
-//                           status: false,
-//                         ),
-//                         _selectTimeCard(
-//                           startingTime: '2:00 AM',
-//                           endingTime: '3:00 AM',
-//                           status: false,
-//                         ),
-//                         _selectTimeCard(
-//                           startingTime: '3:00 AM',
-//                           endingTime: '4:00 AM',
-//                           status: false,
-//                         ),
-//                         _selectTimeCard(
-//                           startingTime: '4:00 AM',
-//                           endingTime: '5:00 AM',
-//                           status: false,
-//                         ),
-//                         _selectTimeCard(
-//                           startingTime: '5:00 AM',
-//                           endingTime: '6:00 AM',
-//                           status: false,
-//                         ),
-//                         _selectTimeCard(
-//                           startingTime: '6:00 AM',
-//                           endingTime: '7:00 AM',
-//                           status: false,
-//                         ),
-//                         _selectTimeCard(
-//                           startingTime: '7:00 AM',
-//                           endingTime: '8:00 AM',
-//                           status: false,
-//                         ),
-//                         _selectTimeCard(
-//                           startingTime: '8:00 AM',
-//                           endingTime: '9:00 AM',
-//                           status: false,
-//                         ),
-//                       ],
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// Widget _selectTimeCard({
-//   required String startingTime,
-//   required String endingTime,
-//   required bool status,
-// }) {
-//   return Container(
-//     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-//     decoration: BoxDecoration(
-//       color: Colors.green.shade100,
-//       borderRadius: BorderRadius.circular(10),
-//       border: Border.all(color: Colors.grey.shade50),
-//     ),
-//     child: Column(
-//       children: [
-//         Text(
-//           '$startingTime -',
-//           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-//         ),
-//         Text(
-//           endingTime,
-//           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-//         ),
-//         SizedBox(height: 4),
-//         Text(
-//           textAlign: TextAlign.left,
-//           status ? 'Availble' : 'booked',
-//           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-//         ),
-//       ],
-//     ),
-//   );
-// }
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:turfix/core/constants/app_fuctions.dart';
 import 'package:turfix/model/date_booking_model.dart';
 import 'package:turfix/view/screens/user_screens/booking_screen.dart';
 import 'package:turfix/view_model/bookig_provider.dart';
 
 class TurfDetailsScreen extends StatelessWidget {
-  const TurfDetailsScreen({super.key});
+  final QueryDocumentSnapshot<Map<String, dynamic>> turfDetails;
+  const TurfDetailsScreen({super.key, required this.turfDetails});
 
   @override
   Widget build(BuildContext context) {
@@ -378,8 +90,8 @@ class TurfDetailsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Green Field Arena",
+                        Text(
+                          turfDetails['turfName'],
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 34,
@@ -400,7 +112,7 @@ class TurfDetailsScreen extends StatelessWidget {
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: const Row(
+                              child: Row(
                                 children: [
                                   Icon(
                                     Icons.star,
@@ -409,7 +121,7 @@ class TurfDetailsScreen extends StatelessWidget {
                                   ),
                                   SizedBox(width: 5),
                                   Text(
-                                    "4.6",
+                                    turfDetails['rating'].toString(),
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -420,8 +132,8 @@ class TurfDetailsScreen extends StatelessWidget {
 
                             const SizedBox(width: 10),
 
-                            const Text(
-                              "(126 reviews)",
+                            Text(
+                              "(${turfDetails['reviewCount']} reviews)",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 17,
@@ -455,27 +167,28 @@ class TurfDetailsScreen extends StatelessWidget {
             ),
             SizedBox(height: 16),
 
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /// Sport & Price
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Row(
+            SizedBox(
+              height: 30,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: turfDetails['sportTypes'].length,
+                itemBuilder: (context, index) {
+                  final turf = turfDetails['sportTypes'][index];
+                  return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
-                        Icons.sports_soccer,
+                      const SizedBox(width: 30),
+                      Icon(
+                        AppFuctions.getSportIcon(turf),
                         color: Color(0xff16A34A),
                         size: 20,
                       ),
                       const SizedBox(width: 8),
-
                       RichText(
-                        text: const TextSpan(
+                        text: TextSpan(
                           children: [
                             TextSpan(
-                              text: "Football",
+                              text: turf,
                               style: TextStyle(
                                 color: Color(0xff16A34A),
                                 fontWeight: FontWeight.w600,
@@ -493,339 +206,246 @@ class TurfDetailsScreen extends StatelessWidget {
                         ),
                       ),
                     ],
-                  ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 30),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: const Text(
+                  "Facilities",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
+              ),
+            ),
 
-                const SizedBox(height: 30),
+            const SizedBox(height: 15),
 
-                /// Facilities Heading
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "Facilities",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
+            SizedBox(
+              height: 110,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: turfDetails['facilities'].length,
+                itemBuilder: (context, index) {
+                  final facility = turfDetails['facilities'][index];
+                  return Container(
+                    width: 78,
+                    margin: const EdgeInsets.only(left: 14),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 56,
+                          width: 56,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.grey.shade200),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(.04),
+                                blurRadius: 8,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Icon(
+                            AppFuctions.getFacilityIcon(facility),
+                            color: const Color(0xff16A34A),
+                            size: 26,
+                          ),
                         ),
-                      ),
 
-                      TextButton(
-                        onPressed: () {},
-                        child: const Row(
-                          children: [
-                            Text(
-                              "View all",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            SizedBox(width: 3),
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              size: 14,
-                              color: Colors.grey,
-                            ),
-                          ],
+                        const SizedBox(height: 8),
+
+                        Text(
+                          facility,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 13),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 14),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Select Date",
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
-                ),
 
-                const SizedBox(height: 15),
+                  Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.calendar_today_outlined, size: 20),
+                  ),
+                ],
+              ),
+            ),
 
-                SizedBox(
-                  height: 95,
-                  child: ListView(
+            const SizedBox(height: 20),
+
+            SizedBox(
+              height: 110,
+              child: Consumer<BookingProvider>(
+                builder: (_, provider, __) {
+                  return ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    children: const [
-                      FacilityCard(icon: Icons.local_parking, title: "Parking"),
-                      FacilityCard(icon: Icons.shower, title: "Shower"),
-                      FacilityCard(
-                        icon: Icons.lightbulb_outline,
-                        title: "Floodlights",
-                      ),
-                      FacilityCard(icon: Icons.wc, title: "Washroom"),
-                      FacilityCard(icon: Icons.local_cafe, title: "Cafeteria"),
-                      FacilityCard(icon: Icons.wifi, title: "Wi-Fi"),
-                      FacilityCard(icon: Icons.videocam, title: "CCTV"),
-                    ],
-                  ),
+                    itemCount: provider.dates.length,
+                    itemBuilder: (_, index) {
+                      return DateCard(
+                        bookingDate: provider.dates[index],
+                        onTap: () => provider.selectDate(index),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 14),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: const Text(
+                  "Select Time",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 14),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "Select Date",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+              ),
+            ),
+            SizedBox(height: 8),
 
-                      Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.calendar_today_outlined,
-                          size: 20,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Selector<BookingProvider, String>(
+                selector: (_, provider) => provider.dateFormat,
 
-                const SizedBox(height: 20),
+                builder: (context, dateId, _) {
+                  return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                    stream: FirebaseFirestore.instance
+                        .collection('turfs')
+                        .doc(turfDetails.id)
+                        .collection('slots')
+                        .doc(dateId)
+                        .collection('times')
+                        .orderBy('startAt')
+                        .snapshots(),
 
-                SizedBox(
-                  height: 110,
-                  child: Consumer<BookingProvider>(
-                    builder: (_, provider, __) {
-                      return ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: provider.dates.length,
-                        itemBuilder: (_, index) {
-                          return DateCard(
-                            bookingDate: provider.dates[index],
-                            onTap: () => provider.selectDate(index),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      }
+
+                      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                        return const Center(child: Text('No slots available'));
+                      }
+
+                      final slots = snapshot.data!.docs;
+
+                      return Consumer<BookingProvider>(
+                        builder: (context, provider, _) {
+                          return GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+
+                            itemCount: slots.length,
+
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 12,
+                                  mainAxisSpacing: 12,
+                                  childAspectRatio: 1,
+                                ),
+
+                            itemBuilder: (context, index) {
+                              final slotDocument = slots[index];
+
+                              final data = slotDocument.data();
+
+                              final startAt = (data['startAt'] as Timestamp)
+                                  .toDate();
+
+                              final endAt = (data['endAt'] as Timestamp)
+                                  .toDate();
+
+                              final status = data['status'];
+
+                              final isAvailable = status == 'available';
+
+                              final isSelected = provider.isSlotSelected(
+                                slotDocument.id,
+                              );
+
+                              final slotIds = slots
+                                  .map((doc) => doc.id)
+                                  .toList();
+
+                              final availableSlotIds = slots
+                                  .where(
+                                    (doc) =>
+                                        doc.data()['status'] == 'available',
+                                  )
+                                  .map((doc) => doc.id)
+                                  .toList();
+
+                              final canSelect =
+                                  isAvailable &&
+                                  provider.canSelectSlot(
+                                    index: index,
+                                    slotIds: slotIds,
+                                    availableSlotIds: availableSlotIds,
+                                  );
+
+                              return TimeSlotCard(
+                                startTime: DateFormat('h:mm a').format(startAt),
+
+                                endTime: DateFormat('h:mm a').format(endAt),
+
+                                price: '₹${data['price']}',
+
+                                status: isAvailable
+                                    ? SlotStatus.available
+                                    : SlotStatus.booked,
+
+                                isSelected: isSelected,
+
+                                onTap: canSelect
+                                    ? () {
+                                        provider.toggleSlot(
+                                          slotId: slotDocument.id,
+                                          slotData: data,
+                                        );
+                                      }
+                                    : null,
+                              );
+                            },
                           );
                         },
                       );
                     },
-                  ),
-                ),
-                SizedBox(height: 14),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: const Text(
-                    "Select Time",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                ),
-
-                Container(
-                  margin: EdgeInsets.all(6),
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(
-                    child: Consumer<BookingProvider>(
-                      builder: (_, provider, __) {
-                        return Wrap(
-                          spacing: 20,
-                          runSpacing: 12,
-                          children: [
-                            TimeSlotCard(
-                              startTime: "12:00 AM",
-                              endTime: "1:00 AM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(0),
-                              onTap: () => provider.selectSlot(0),
-                            ),
-                            TimeSlotCard(
-                              startTime: "1:00 AM",
-                              endTime: "2:00 AM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(1),
-                              onTap: () => provider.selectSlot(1),
-                            ),
-                            TimeSlotCard(
-                              startTime: "2:00 AM",
-                              endTime: "3:00 AM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(2),
-                              onTap: () => provider.selectSlot(2),
-                            ),
-                            TimeSlotCard(
-                              startTime: "3:00 AM",
-                              endTime: "4:00 AM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(3),
-                              onTap: () => provider.selectSlot(3),
-                            ),
-                            TimeSlotCard(
-                              startTime: "4:00 AM",
-                              endTime: "5:00 AM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(4),
-                              onTap: () => provider.selectSlot(4),
-                            ),
-                            TimeSlotCard(
-                              startTime: "5:00 AM",
-                              endTime: "6:00 AM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(5),
-                              onTap: () => provider.selectSlot(5),
-                            ),
-                            TimeSlotCard(
-                              startTime: "6:00 AM",
-                              endTime: "7:00 AM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(6),
-                              onTap: () => provider.selectSlot(6),
-                            ),
-                            TimeSlotCard(
-                              startTime: "7:00 AM",
-                              endTime: "8:00 AM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(7),
-                              onTap: () => provider.selectSlot(7),
-                            ),
-                            TimeSlotCard(
-                              startTime: "8:00 AM",
-                              endTime: "9:00 AM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(8),
-                              onTap: () => provider.selectSlot(8),
-                            ),
-                            TimeSlotCard(
-                              startTime: "9:00 AM",
-                              endTime: "10:00 AM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(9),
-                              onTap: () => provider.selectSlot(9),
-                            ),
-                            TimeSlotCard(
-                              startTime: "10:00 AM",
-                              endTime: "11:00 AM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(10),
-                              onTap: () => provider.selectSlot(10),
-                            ),
-                            TimeSlotCard(
-                              startTime: "11:00 AM",
-                              endTime: "12:00 PM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(11),
-                              onTap: () => provider.selectSlot(11),
-                            ),
-                            TimeSlotCard(
-                              startTime: "12:00 PM",
-                              endTime: "1:00 PM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(12),
-                              onTap: () => provider.selectSlot(12),
-                            ),
-                            TimeSlotCard(
-                              startTime: "1:00 PM",
-                              endTime: "2:00 PM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(13),
-                              onTap: () => provider.selectSlot(13),
-                            ),
-                            TimeSlotCard(
-                              startTime: "2:00 PM",
-                              endTime: "3:00 PM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(14),
-                              onTap: () => provider.selectSlot(14),
-                            ),
-                            TimeSlotCard(
-                              startTime: "3:00 PM",
-                              endTime: "4:00 PM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(15),
-                              onTap: () => provider.selectSlot(15),
-                            ),
-                            TimeSlotCard(
-                              startTime: "4:00 PM",
-                              endTime: "5:00 PM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(16),
-                              onTap: () => provider.selectSlot(16),
-                            ),
-                            TimeSlotCard(
-                              startTime: "5:00 PM",
-                              endTime: "6:00 PM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(17),
-                              onTap: () => provider.selectSlot(17),
-                            ),
-                            TimeSlotCard(
-                              startTime: "6:00 PM",
-                              endTime: "7:00 PM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(18),
-                              onTap: () => provider.selectSlot(18),
-                            ),
-                            TimeSlotCard(
-                              startTime: "7:00 PM",
-                              endTime: "8:00 PM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(19),
-                              onTap: () => provider.selectSlot(19),
-                            ),
-                            TimeSlotCard(
-                              startTime: "8:00 PM",
-                              endTime: "9:00 PM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(20),
-                              onTap: () => provider.selectSlot(20),
-                            ),
-                            TimeSlotCard(
-                              startTime: "9:00 PM",
-                              endTime: "10:00 PM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(21),
-                              onTap: () => provider.selectSlot(21),
-                            ),
-                            TimeSlotCard(
-                              startTime: "10:00 PM",
-                              endTime: "11:00 PM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(22),
-                              onTap: () => provider.selectSlot(22),
-                            ),
-                            TimeSlotCard(
-                              startTime: "11:00 PM",
-                              endTime: "12:00 AM",
-                              price: "₹1200",
-                              status: SlotStatus.available,
-                              isSelected: provider.isSelected(23),
-                              onTap: () => provider.selectSlot(23),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                SizedBox(height: 50),
-              ],
+                  );
+                },
+              ),
             ),
+            SizedBox(height: 50),
           ],
         ),
       ),
