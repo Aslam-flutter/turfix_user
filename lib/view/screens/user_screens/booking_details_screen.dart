@@ -19,7 +19,9 @@ class BookingDetailsScreen extends StatelessWidget {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
         ),
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
         ),
       ),

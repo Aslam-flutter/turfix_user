@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:turfix/view/screens/user_screens/booking_details_screen.dart';
+import 'package:turfix/view/screens/user_screens/user_main_screen.dart';
 
 class MyBookingsScreen extends StatefulWidget {
   const MyBookingsScreen({super.key});
@@ -26,7 +29,12 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
         ),
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => UserMainScreen()),
+            );
+          },
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
         ),
       ),
@@ -49,28 +57,128 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
             const SizedBox(height: 25),
 
             Expanded(
-              child: ListView(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BookingDetailsScreen(),
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('bookings')
+                    .where(
+                      'userId',
+                      isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+                    )
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  }
+
+                  final bookingDetails = snapshot.data!.docs;
+
+                  if (bookingDetails.isEmpty) {
+                    return Text('No booking details found');
+                  }
+                  return ListView.builder(
+                    itemCount: bookingDetails.length,
+                    itemBuilder: (context, index) {
+                      final bookingDetail = bookingDetails[index];
+                      return Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(18),
+                          border: Border.all(color: Colors.grey.shade200),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(.04),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.network(
+                                'https://media.vyaparify.com/vcards/blogs/108755/mobs2.jpg',
+                                height: 80,
+                                width: 80,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+
+                            const SizedBox(width: 14),
+
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    bookingDetail['turfName'],
+                                    style: const TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 6),
+
+                                  Text(
+                                    bookingDetail['turfLocation'],
+                                    style: TextStyle(
+                                      color: Colors.grey.shade600,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 6),
+
+                                  Text(
+                                    bookingDetail['sport'],
+                                    style: TextStyle(
+                                      color: Colors.grey.shade700,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 10),
+
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 5,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            bookingDetail['status'] ==
+                                                'confirmed'
+                                            ? Colors.green.withOpacity(.12)
+                                            : Colors.red.withOpacity(.12),
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      child: Text(
+                                        bookingDetail['status'],
+                                        style: TextStyle(
+                                          color:
+                                              bookingDetail['status'] ==
+                                                  'confirmed'
+                                              ? Colors.green.withOpacity(.12)
+                                              : Colors.red.withOpacity(.12),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
-                    child: BookingCard(
-                      image:
-                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwq1O-qC-iZVN_4hkTobZRzKrsWYBbmqrrgls7NwcKUSzQuwJLvMC3xcU&s=10",
-                      title: "Green Field Arena",
-                      date: "20 May 2026 • 06:00 PM",
-                      sport: "Football • 1 Hour",
-                      status: "Upcoming",
-                      statusColor: Colors.orange,
-                    ),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
           ],
@@ -111,108 +219,108 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
   }
 }
 
-class BookingCard extends StatelessWidget {
-  final String image;
-  final String title;
-  final String date;
-  final String sport;
-  final String status;
-  final Color statusColor;
+// class BookingCard extends StatelessWidget {
+//   final String image;
+//   final String title;
+//   final String date;
+//   final String sport;
+//   final String status;
+//   final Color statusColor;
 
-  const BookingCard({
-    super.key,
-    required this.image,
-    required this.title,
-    required this.date,
-    required this.sport,
-    required this.status,
-    required this.statusColor,
-  });
+//   const BookingCard({
+//     super.key,
+//     required this.image,
+//     required this.title,
+//     required this.date,
+//     required this.sport,
+//     required this.status,
+//     required this.statusColor,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade200),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(.04),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.network(
-              image,
-              height: 80,
-              width: 80,
-              fit: BoxFit.cover,
-            ),
-          ),
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: const EdgeInsets.all(14),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: BorderRadius.circular(18),
+//         border: Border.all(color: Colors.grey.shade200),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.black.withOpacity(.04),
+//             blurRadius: 10,
+//             offset: const Offset(0, 4),
+//           ),
+//         ],
+//       ),
+//       child: Row(
+//         children: [
+//           ClipRRect(
+//             borderRadius: BorderRadius.circular(12),
+//             child: Image.network(
+//               image,
+//               height: 80,
+//               width: 80,
+//               fit: BoxFit.cover,
+//             ),
+//           ),
 
-          const SizedBox(width: 14),
+//           const SizedBox(width: 14),
 
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+//           Expanded(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                   title,
+//                   style: const TextStyle(
+//                     fontSize: 17,
+//                     fontWeight: FontWeight.bold,
+//                   ),
+//                 ),
 
-                const SizedBox(height: 6),
+//                 const SizedBox(height: 6),
 
-                Text(
-                  date,
-                  style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
-                ),
+//                 Text(
+//                   date,
+//                   style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+//                 ),
 
-                const SizedBox(height: 6),
+//                 const SizedBox(height: 6),
 
-                Text(
-                  sport,
-                  style: TextStyle(color: Colors.grey.shade700, fontSize: 14),
-                ),
+//                 Text(
+//                   sport,
+//                   style: TextStyle(color: Colors.grey.shade700, fontSize: 14),
+//                 ),
 
-                const SizedBox(height: 10),
+//                 const SizedBox(height: 10),
 
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 5,
-                    ),
-                    decoration: BoxDecoration(
-                      color: statusColor.withOpacity(.12),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Text(
-                      status,
-                      style: TextStyle(
-                        color: statusColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//                 Align(
+//                   alignment: Alignment.centerRight,
+//                   child: Container(
+//                     padding: const EdgeInsets.symmetric(
+//                       horizontal: 12,
+//                       vertical: 5,
+//                     ),
+//                     decoration: BoxDecoration(
+//                       color: statusColor.withOpacity(.12),
+//                       borderRadius: BorderRadius.circular(30),
+//                     ),
+//                     child: Text(
+//                       status,
+//                       style: TextStyle(
+//                         color: statusColor,
+//                         fontWeight: FontWeight.bold,
+//                         fontSize: 12,
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

@@ -252,32 +252,38 @@ class BookingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  //--------------------------------------------------
+  String formatDate(DateTime date) {
+    return date.toIso8601String().split('T').first;
+  }
+
   // --------------------------------------------------
   // BOOK MULTIPLE SLOTS
   // --------------------------------------------------
 
   Future<String> bookSlots({
     required String turfId,
+    required String turfName,
+    required String turfLocation,
     required String userId,
     required String sport,
     required String paymentMethod,
   }) async {
-    if (selectedSlotIds.isEmpty) {
-      throw Exception('Please select at least one slot.');
-    }
-
-    if (selectedDate == null) {
-      throw Exception('Please select a date.');
-    }
-
-    sortSelectedSlots();
-
     final firestore = FirebaseFirestore.instance;
 
-    final dateId = dateFormat;
+    if (selectedDate == null || selectedSlotIds.isEmpty) {
+      throw Exception('Date or slot not selected');
+    }
 
+    // Make sure selectedSlots are in time order
+    sortSelectedSlots();
+
+    final dateId = formatDate(selectedDate!);
+
+    // Create booking document reference
     final bookingRef = firestore.collection('bookings').doc();
 
+    // Create references to selected slots
     final slotRefs = selectedSlotIds.map((slotId) {
       return firestore
           .collection('turfs')
@@ -289,11 +295,11 @@ class BookingProvider extends ChangeNotifier {
     }).toList();
 
     await firestore.runTransaction((transaction) async {
-      // ------------------------------------------
-      // 1. READ ALL SLOTS FIRST
-      // ------------------------------------------
+      // -----------------------------------------
+      // 1. READ ALL SELECTED SLOTS
+      // -----------------------------------------
 
-      final slotSnapshots = <DocumentSnapshot>[];
+      final slotSnapshots = <DocumentSnapshot<Map<String, dynamic>>>[];
 
       for (final slotRef in slotRefs) {
         final snapshot = await transaction.get(slotRef);
@@ -305,52 +311,43 @@ class BookingProvider extends ChangeNotifier {
         slotSnapshots.add(snapshot);
       }
 
-      // ------------------------------------------
-      // 2. CHECK ALL SLOTS
-      // ------------------------------------------
+      // -----------------------------------------
+      // 2. CHECK AVAILABILITY
+      // -----------------------------------------
 
       for (final snapshot in slotSnapshots) {
-        final data = snapshot.data() as Map<String, dynamic>;
+        final data = snapshot.data()!;
 
         if (data['status'] != 'available') {
-          throw Exception(
-            'One of your selected slots has already been booked.',
-          );
+          throw Exception('One of the selected slots is already booked.');
         }
       }
 
-      // ------------------------------------------
+      // -----------------------------------------
       // 3. CREATE BOOKING
-      // ------------------------------------------
+      // -----------------------------------------
 
       transaction.set(bookingRef, {
+        'bookingId': bookingRef.id,
         'turfId': turfId,
+        'turfName': turfName,
+        'turfLocation': turfLocation,
         'userId': userId,
-
-        'dateId': dateId,
-
+        'date': dateId,
         'slotIds': selectedSlotIds,
-
         'startAt': Timestamp.fromDate(bookingStartTime!),
-
         'endAt': Timestamp.fromDate(bookingEndTime!),
-
         'duration': totalHours,
-
-        'price': totalPrice,
-
+        'totalAmount': totalPrice,
         'sport': sport,
-
         'paymentMethod': paymentMethod,
-
         'status': 'confirmed',
-
         'createdAt': FieldValue.serverTimestamp(),
       });
 
-      // ------------------------------------------
-      // 4. MARK ALL SLOTS AS BOOKED
-      // ------------------------------------------
+      // -----------------------------------------
+      // 4. CHANGE SLOTS TO BOOKED
+      // -----------------------------------------
 
       for (final slotRef in slotRefs) {
         transaction.update(slotRef, {
@@ -359,6 +356,8 @@ class BookingProvider extends ChangeNotifier {
         });
       }
     });
+
+    debugPrint('Booking successful: ${bookingRef.id}');
 
     return bookingRef.id;
   }

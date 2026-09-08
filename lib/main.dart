@@ -5,6 +5,8 @@ import 'package:turfix/firebase_options.dart';
 import 'package:turfix/view/auth/splash_screen.dart';
 import 'package:turfix/view_model/bookig_provider.dart';
 import 'package:turfix/view_model/common_provider.dart';
+import 'package:turfix/view_model/payment_provider.dart';
+import 'package:turfix/view_model/slot_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +17,8 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => CommonProvider()),
         ChangeNotifierProvider(create: (context) => BookingProvider()),
+        ChangeNotifierProvider(create: (context) => SlotProvider()),
+        ChangeNotifierProvider(create: (context) => PaymentProvider()),
       ],
       child: const MyApp(),
     ),

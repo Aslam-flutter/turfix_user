@@ -1,9 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:turfix/view/screens/user_screens/booking_screen.dart';
 import 'package:turfix/view/screens/user_screens/my_booking_screen.dart';
-import 'package:turfix/view/screens/user_screens/user_home_screen.dart';
+import 'package:turfix/view/screens/user_screens/user_main_screen.dart';
 
 class BookingConfirmedScreen extends StatelessWidget {
-  const BookingConfirmedScreen({super.key});
+  final String turfName;
+  final String turfLocation;
+  final String bookingId;
+  final String paymentMethod;
+  final String date;
+  final String time;
+  final String timeDuration;
+  final String sport;
+  final String amount;
+  const BookingConfirmedScreen({
+    super.key,
+    required this.turfName,
+    required this.turfLocation,
+    required this.time,
+    required this.amount,
+    required this.bookingId,
+    required this.date,
+    required this.paymentMethod,
+    required this.sport,
+    required this.timeDuration,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -84,11 +105,11 @@ class BookingConfirmedScreen extends StatelessWidget {
 
                             const SizedBox(width: 15),
 
-                            const Column(
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Green Field Arena",
+                                  turfName,
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -98,7 +119,7 @@ class BookingConfirmedScreen extends StatelessWidget {
                                 SizedBox(height: 6),
 
                                 Text(
-                                  "Kozhikode, Kerala",
+                                  turfLocation,
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 16,
@@ -110,10 +131,10 @@ class BookingConfirmedScreen extends StatelessWidget {
                         ),
                       ),
                       const Divider(endIndent: 14, indent: 14),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Column(
-                        children: const [
-                          Text(
+                        children: [
+                          const Text(
                             "Booking ID",
                             style: TextStyle(color: Colors.grey, fontSize: 13),
                           ),
@@ -121,8 +142,8 @@ class BookingConfirmedScreen extends StatelessWidget {
                           SizedBox(height: 8),
 
                           Text(
-                            "#TFX240802001",
-                            style: TextStyle(
+                            "#$bookingId",
+                            style: const TextStyle(
                               color: Color(0xff16A34A),
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
@@ -139,8 +160,8 @@ class BookingConfirmedScreen extends StatelessWidget {
                           /// Booking ID
                           Expanded(
                             child: Column(
-                              children: const [
-                                Text(
+                              children: [
+                                const Text(
                                   "Payment Method",
                                   style: TextStyle(
                                     color: Colors.grey,
@@ -148,11 +169,13 @@ class BookingConfirmedScreen extends StatelessWidget {
                                   ),
                                 ),
 
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
 
                                 Text(
-                                  "UPI",
-                                  style: TextStyle(
+                                  paymentMethod == PaymentMethod.upi.name
+                                      ? 'UPI'
+                                      : 'Pay at Venue',
+                                  style: const TextStyle(
                                     color: Color(0xff16A34A),
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -178,7 +201,7 @@ class BookingConfirmedScreen extends StatelessWidget {
                                     fontSize: 13,
                                   ),
                                 ),
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
 
                                 Container(
                                   padding: const EdgeInsets.symmetric(
@@ -189,28 +212,50 @@ class BookingConfirmedScreen extends StatelessWidget {
                                     color: const Color(0xffEAF8EE),
                                     borderRadius: BorderRadius.circular(30),
                                     border: Border.all(
-                                      color: const Color(0xff16A34A),
+                                      color:
+                                          paymentMethod ==
+                                              PaymentMethod.upi.name
+                                          ? const Color(0xff16A34A)
+                                          : Colors.red,
                                     ),
                                   ),
-                                  child: const Row(
+                                  child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       CircleAvatar(
                                         radius: 9,
-                                        backgroundColor: Color(0xff16A34A),
-                                        child: Icon(
-                                          Icons.check,
-                                          size: 13,
-                                          color: Colors.white,
-                                        ),
+                                        backgroundColor:
+                                            paymentMethod ==
+                                                PaymentMethod.upi.name
+                                            ? const Color(0xff16A34A)
+                                            : Colors.red,
+                                        child:
+                                            paymentMethod ==
+                                                PaymentMethod.upi.name
+                                            ? const Icon(
+                                                Icons.check,
+                                                size: 13,
+                                                color: Colors.white,
+                                              )
+                                            : const Icon(
+                                                Icons.close,
+                                                size: 13,
+                                                color: Colors.white,
+                                              ),
                                       ),
 
-                                      SizedBox(width: 8),
+                                      const SizedBox(width: 8),
 
                                       Text(
-                                        "Paid",
+                                        paymentMethod == PaymentMethod.upi.name
+                                            ? "Paid"
+                                            : "Unpaid",
                                         style: TextStyle(
-                                          color: Color(0xff16A34A),
+                                          color:
+                                              paymentMethod ==
+                                                  PaymentMethod.upi.name
+                                              ? const Color(0xff16A34A)
+                                              : Colors.red,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
@@ -236,7 +281,7 @@ class BookingConfirmedScreen extends StatelessWidget {
                             bookingDetail(
                               icon: Icons.calendar_today_outlined,
                               title: "Date",
-                              value: "20 May 2026",
+                              value: date,
                             ),
 
                             const SizedBox(height: 16),
@@ -244,7 +289,7 @@ class BookingConfirmedScreen extends StatelessWidget {
                             bookingDetail(
                               icon: Icons.access_time,
                               title: "Time",
-                              value: "06:00 PM - 07:00 PM",
+                              value: time,
                             ),
 
                             const SizedBox(height: 16),
@@ -260,7 +305,7 @@ class BookingConfirmedScreen extends StatelessWidget {
                             bookingDetail(
                               icon: Icons.timer_outlined,
                               title: "Duration",
-                              value: "1 Hour",
+                              value: timeDuration,
                             ),
 
                             const SizedBox(height: 20),
@@ -282,9 +327,9 @@ class BookingConfirmedScreen extends StatelessWidget {
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text(
-                              "Amount Paid",
+                          children: [
+                            const Text(
+                              "Amount",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
@@ -292,8 +337,8 @@ class BookingConfirmedScreen extends StatelessWidget {
                             ),
 
                             Text(
-                              "₹1200",
-                              style: TextStyle(
+                              "₹$amount",
+                              style: const TextStyle(
                                 fontSize: 24,
                                 color: Color(0xff16A34A),
                                 fontWeight: FontWeight.bold,
@@ -378,7 +423,7 @@ class BookingConfirmedScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => UserHomeScreen()),
+                      MaterialPageRoute(builder: (context) => UserMainScreen()),
                       (route) => false,
                     );
                   },

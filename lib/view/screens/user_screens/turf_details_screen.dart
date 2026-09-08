@@ -451,37 +451,53 @@ class TurfDetailsScreen extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
-      floatingActionButton: SizedBox(
-        width: MediaQuery.of(context).size.width - 32,
-        height: 56,
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => BookingScreen()),
-            );
-          },
-          backgroundColor: const Color(0xff16A34A),
-          elevation: 3,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          label: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Continue",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
+      floatingActionButton: Consumer<BookingProvider>(
+        builder: (context, provider, _) {
+          final hasSelection = provider.selectedSlots.isNotEmpty;
+
+          return SizedBox(
+            width: MediaQuery.of(context).size.width - 32,
+            height: 56,
+            child: FloatingActionButton.extended(
+              onPressed: !hasSelection
+                  ? null
+                  : () {
+                      provider.sortSelectedSlots();
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BookingScreen(
+                            turf: turfDetails,
+                            date: provider.selectedDate!,
+                            selectedSlots: provider.selectedSlots,
+                          ),
+                        ),
+                      );
+                    },
+              backgroundColor: const Color(0xff16A34A),
+              elevation: 3,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
               ),
-              SizedBox(width: 8),
-              Icon(Icons.arrow_forward_rounded, color: Colors.white),
-            ],
-          ),
-        ),
+              label: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Continue",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Icon(Icons.arrow_forward_rounded, color: Colors.white),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
