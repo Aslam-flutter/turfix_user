@@ -1,11 +1,36 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:turfix/core/constants/app_constants.dart';
 
 class BookingDetailsScreen extends StatelessWidget {
-  const BookingDetailsScreen({super.key});
+  final QueryDocumentSnapshot<Map<String, dynamic>> bookingDetails;
+  const BookingDetailsScreen({super.key, required this.bookingDetails});
 
   @override
   Widget build(BuildContext context) {
     // const primary = Color(0xff16A34A);
+    // created At
+    final timestamp = bookingDetails['createdAt'];
+    final dateTime = timestamp.toDate();
+    final formattedDate = DateFormat('d MMM yyyy').format(dateTime);
+    final formattedDate2 = DateFormat('d MMM yyyy - h:mm a').format(dateTime);
+
+    // start time
+    final timestamp2 = bookingDetails['startAt'];
+    final dateTime2 = timestamp2.toDate();
+    final formattedDate3 = DateFormat('h:mm a').format(dateTime2);
+
+    // end time
+    final timestamp3 = bookingDetails['endAt'];
+    final dateTime3 = timestamp3.toDate();
+    final formattedDate4 = DateFormat('h:mm a').format(dateTime3);
+
+    final bookingID = bookingDetails['bookingId'];
+
+    final duration = AppConstants.timeDifference(dateTime2, dateTime3);
+
+    final sportType = bookingDetails['sport'];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -69,30 +94,30 @@ class BookingDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            const Text(
-              "Green Field Arena",
+            Text(
+              bookingDetails['turfName'],
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 6),
 
             Text(
-              "Kozhikode, Kerala",
+              bookingDetails['turfLocation'],
               style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
             ),
 
             const SizedBox(height: 30),
 
-            const Row(
+            Row(
               children: [
                 Expanded(
-                  child: BookingInfo(title: "Date", value: "20 May 2026"),
+                  child: BookingInfo(title: "Date", value: formattedDate),
                 ),
 
                 Expanded(
                   child: BookingInfo(
                     title: "Time",
-                    value: "06:00 PM - 07:00 PM",
+                    value: "$formattedDate3 - $formattedDate4",
                   ),
                 ),
               ],
@@ -100,14 +125,17 @@ class BookingDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            const Row(
+            Row(
               children: [
                 Expanded(
-                  child: BookingInfo(title: "Sport", value: "Football"),
+                  child: BookingInfo(title: "Sport", value: sportType),
                 ),
 
                 Expanded(
-                  child: BookingInfo(title: "Duration", value: "1 Hour"),
+                  child: BookingInfo(
+                    title: "Duration",
+                    value: "$duration Hour",
+                  ),
                 ),
               ],
             ),
@@ -118,14 +146,11 @@ class BookingDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-            const BookingInfo(title: "Booking ID", value: "TRX12345678"),
+            BookingInfo(title: "Booking ID", value: bookingID),
 
             const SizedBox(height: 20),
 
-            const BookingInfo(
-              title: "Booked On",
-              value: "18 May 2026 • 10:30 AM",
-            ),
+            BookingInfo(title: "Booked On", value: formattedDate2),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:turfix/model/date_booking_model.dart';
 
@@ -264,6 +265,8 @@ class BookingProvider extends ChangeNotifier {
   Future<String> bookSlots({
     required String turfId,
     required String turfName,
+    required String customerName,
+    required String turfImage,
     required String turfLocation,
     required String userId,
     required String sport,
@@ -331,6 +334,8 @@ class BookingProvider extends ChangeNotifier {
         'bookingId': bookingRef.id,
         'turfId': turfId,
         'turfName': turfName,
+        'customerName': customerName,
+        'turfImage': turfImage,
         'turfLocation': turfLocation,
         'userId': userId,
         'date': dateId,
@@ -360,5 +365,20 @@ class BookingProvider extends ChangeNotifier {
     debugPrint('Booking successful: ${bookingRef.id}');
 
     return bookingRef.id;
+  }
+
+  Future<String?> getCustomerName() async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) return 'no user';
+
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+
+    if (!doc.exists) return 'no user';
+
+    return doc.data()?['name']?.toString();
   }
 }

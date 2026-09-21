@@ -14,11 +14,13 @@ class BookingScreen extends StatelessWidget {
   final QueryDocumentSnapshot<Map<String, dynamic>> turf;
   final DateTime date;
   final List<Map<String, dynamic>> selectedSlots;
+  final String customerName;
   const BookingScreen({
     super.key,
     required this.turf,
     required this.date,
     required this.selectedSlots,
+    required this.customerName,
   });
 
   DateTime get startTime {
@@ -85,6 +87,8 @@ class BookingScreen extends StatelessWidget {
                     final bookingId = await providerr.bookSlots(
                       turfId: turf.id,
                       turfName: turf['turfName'],
+                      customerName: customerName,
+                      turfImage: turf['turfImages'][0],
                       turfLocation: turf['location'],
                       userId: FirebaseAuth.instance.currentUser!.uid,
                       sport: 'football',
@@ -178,7 +182,7 @@ class BookingScreen extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.network(
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwq1O-qC-iZVN_4hkTobZRzKrsWYBbmqrrgls7NwcKUSzQuwJLvMC3xcU&s=10",
+                      turf['turfImages'][0],
                       height: 100,
                       width: 100,
                       fit: BoxFit.cover,

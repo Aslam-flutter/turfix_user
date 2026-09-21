@@ -29,7 +29,7 @@ class TurfDetailsScreen extends StatelessWidget {
                       bottomRight: Radius.circular(30),
                     ),
                     child: Image.network(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwq1O-qC-iZVN_4hkTobZRzKrsWYBbmqrrgls7NwcKUSzQuwJLvMC3xcU&s=10', // Your Image
+                      turfDetails['turfImages'][0], // Your Image
                       width: double.infinity,
                       height: 280,
                       fit: BoxFit.cover,
@@ -372,7 +372,7 @@ class TurfDetailsScreen extends StatelessWidget {
                                   crossAxisCount: 3,
                                   crossAxisSpacing: 12,
                                   mainAxisSpacing: 12,
-                                  childAspectRatio: 1,
+                                  childAspectRatio: 0.9,
                                 ),
 
                             itemBuilder: (context, index) {
@@ -461,8 +461,14 @@ class TurfDetailsScreen extends StatelessWidget {
             child: FloatingActionButton.extended(
               onPressed: !hasSelection
                   ? null
-                  : () {
+                  : () async {
                       provider.sortSelectedSlots();
+
+                      final customerName = await provider.getCustomerName();
+
+                      if (customerName == null) {
+                        return;
+                      }
 
                       Navigator.push(
                         context,
@@ -471,6 +477,7 @@ class TurfDetailsScreen extends StatelessWidget {
                             turf: turfDetails,
                             date: provider.selectedDate!,
                             selectedSlots: provider.selectedSlots,
+                            customerName: customerName,
                           ),
                         ),
                       );

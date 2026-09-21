@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AppConstants {
   static const Color primary = Color(0xff16A34A);
@@ -11,5 +12,9 @@ class AppConstants {
 
   static double kHeight(BuildContext context) {
     return MediaQuery.of(context).size.height * 0.8;
+  }
+
+  static int timeDifference(DateTime start, DateTime end) {
+    return end.difference(start).inHours;
   }
 }

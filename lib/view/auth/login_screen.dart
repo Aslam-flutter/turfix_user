@@ -184,11 +184,12 @@ class LoginScreen extends StatelessWidget {
                           .doc(uid)
                           .get();
                       if (doc.exists) {
-                        Navigator.push(
+                        Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
                             builder: (context) => UserMainScreen(),
                           ),
+                          (route) => false,
                         );
                         AppMessenger.customScaffoldMessenger(
                           context,

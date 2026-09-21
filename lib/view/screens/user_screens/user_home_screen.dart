@@ -5,7 +5,8 @@ import 'package:turfix/view/screens/user_screens/favorite_screen.dart';
 import 'package:turfix/view/screens/user_screens/search_turf_screen.dart';
 import 'package:turfix/view/screens/user_screens/slot_maintenance.dart';
 import 'package:turfix/view/screens/user_screens/user_notifications_screen.dart';
-import 'package:turfix/view_model/slot_provider.dart';
+import 'package:turfix/view_model/location_provider.dart';
+import 'package:turfix/view_model/nearby_turf_provider.dart';
 import 'package:turfix/widgets/custom_sized_box.dart';
 
 class UserHomeScreen extends StatelessWidget {
@@ -13,6 +14,8 @@ class UserHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final locatnPrvdr = context.read<LocationProvider>();
+    // locatnPrvdr.getCurrentLocation();
     return SlotMaintenance(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -158,21 +161,25 @@ class UserHomeScreen extends StatelessWidget {
                           padding: const EdgeInsets.all(20.0),
                           child: Column(
                             children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.location_on,
-                                    color: AppConstants.primaryGreen,
-                                  ),
-                                  sw(10),
-                                  Text(
-                                    "Kozhikode, Kerala",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
+                              Consumer<LocationProvider>(
+                                builder: (context, locationProvider, child) {
+                                  return Row(
+                                    children: [
+                                      Icon(
+                                        Icons.location_on,
+                                        color: AppConstants.primaryGreen,
+                                      ),
+                                      sw(10),
+                                      Text(
+                                        locationProvider.currentLocation,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
                               ),
                               sh(10),
                               Container(
@@ -356,136 +363,204 @@ class UserHomeScreen extends StatelessWidget {
                         ),
                         SizedBox(
                           height: 310,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return Row(
-                                children: [
-                                  sw(16),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        height: 150,
-                                        width: 200,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20),
-                                          ),
-                                          image: DecorationImage(
-                                            image: NetworkImage(
-                                              'https://playo.gumlet.io/GAMECITYTURF20240405183049483875/GameCityTurf1763374816361.jpg',
-                                            ),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.all(10),
-                                        height: 160,
-                                        width: 200,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.grey.shade300,
-                                              blurRadius: 1,
-                                              spreadRadius: 1,
-                                            ),
-                                          ],
-                                          borderRadius: BorderRadius.only(
-                                            bottomRight: Radius.circular(20),
-                                            bottomLeft: Radius.circular(20),
-                                          ),
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Green Field Arena',
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.star,
-                                                  color: Colors.amber,
-                                                ),
-                                                sw(6),
-                                                Text(
-                                                  '4.6 ',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: AppConstants.primary,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '(120)',
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.grey.shade400,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            sh(6),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.location_on,
-                                                  color: Colors.blue,
-                                                ),
-                                                Text(
-                                                  ' 2.5 km away',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Spacer(),
-                                                Text(
-                                                  '₹ 1200/hr',
-                                                  style: TextStyle(
-                                                    color:
-                                                        AppConstants.darkGreen,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            sh(6),
-                                            MaterialButton(
-                                              height: 50,
-                                              minWidth: double.infinity,
-                                              color: AppConstants.darkGreen,
-                                              textColor: Colors.white,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              onPressed: () {},
-                                              child: Text(
-                                                "Book Now",
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                          child: Consumer<LocationProvider>(
+                            builder: (context, locationProvider, child) {
+                              final position = locationProvider.currentPosition;
+                              if (position == null) {
+                                return const SizedBox(
+                                  height: 310,
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
                                   ),
-                                ],
+                                );
+                              }
+
+                              // Location is available
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (context.mounted) {
+                                  context
+                                      .read<NearbyTurfProvider>()
+                                      .getNearbyTurfs(position);
+                                }
+                              });
+
+                              return Consumer<NearbyTurfProvider>(
+                                builder: (context, turfProvider, child) {
+                                  if (turfProvider.isLoading) {
+                                    return const SizedBox(
+                                      height: 310,
+                                      child: Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    );
+                                  }
+
+                                  if (turfProvider.nearbyTurfs.isEmpty) {
+                                    return const SizedBox(
+                                      height: 150,
+                                      child: Center(
+                                        child: Text('No nearby turfs found'),
+                                      ),
+                                    );
+                                  }
+
+                                  return ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: turfProvider.nearbyTurfs.length,
+                                    itemBuilder: (context, index) {
+                                      final turf =
+                                          turfProvider.nearbyTurfs[index];
+                                      final distance =
+                                          turf['distance'] as double;
+                                      return Row(
+                                        children: [
+                                          sw(16),
+                                          Column(
+                                            children: [
+                                              Container(
+                                                height: 150,
+                                                width: 200,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(20),
+                                                        topRight:
+                                                            Radius.circular(20),
+                                                      ),
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(
+                                                      turf['turfImages'][0],
+                                                    ),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.all(10),
+                                                height: 160,
+                                                width: 200,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color:
+                                                          Colors.grey.shade300,
+                                                      blurRadius: 1,
+                                                      spreadRadius: 1,
+                                                    ),
+                                                  ],
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                        bottomRight:
+                                                            Radius.circular(20),
+                                                        bottomLeft:
+                                                            Radius.circular(20),
+                                                      ),
+                                                ),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      turf['turfName'],
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.star,
+                                                          color: Colors.amber,
+                                                        ),
+                                                        sw(6),
+                                                        Text(
+                                                          '${turf['rating']}',
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: AppConstants
+                                                                .primary,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          '${turf['reviewCount']}',
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors
+                                                                .grey
+                                                                .shade400,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    sh(6),
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.location_on,
+                                                          color: Colors.blue,
+                                                        ),
+                                                        Text(
+                                                          '${turfProvider.getDistance(distance)} away',
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        Spacer(),
+                                                        Text(
+                                                          '₹ ${turf['pricePerHour']}/hr',
+                                                          style: TextStyle(
+                                                            color: AppConstants
+                                                                .darkGreen,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    sh(6),
+                                                    MaterialButton(
+                                                      height: 50,
+                                                      minWidth: double.infinity,
+                                                      color: AppConstants
+                                                          .darkGreen,
+                                                      textColor: Colors.white,
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              10,
+                                                            ),
+                                                      ),
+                                                      onPressed: () {},
+                                                      child: Text(
+                                                        "Book Now",
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
                               );
                             },
-                            itemCount: 5,
                           ),
                         ),
                       ],

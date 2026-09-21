@@ -204,7 +204,7 @@ class SearchTurfScreen extends StatelessWidget {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: Image.network(
-                                      'https://playo.gumlet.io/GAMECITYTURF20240405183049483875/GameCityTurf1763374816361.jpg',
+                                      turf['turfImages'][0],
                                       height: 100,
                                       width: 100,
                                       fit: BoxFit.cover,
