@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:turfix/view/screens/user_screens/booking_details_screen.dart';
 import 'package:turfix/view/screens/user_screens/user_main_screen.dart';
+import 'package:turfix/view_model/common_provider.dart';
 
 class MyBookingsScreen extends StatefulWidget {
   const MyBookingsScreen({super.key});
@@ -17,6 +19,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
   @override
   Widget build(BuildContext context) {
     // const primary = Color(0xff16A34A);
+    final provider = Provider.of<CommonProvider>(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -44,18 +47,17 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
         child: Column(
           children: [
             /// Tabs
-            Row(
-              children: [
-                tabButton("Upcoming", 0),
-                const SizedBox(width: 10),
-                tabButton("Completed", 1),
-                const SizedBox(width: 10),
-                tabButton("Cancelled", 2),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     tabButton("Upcoming", 0),
+            //     const SizedBox(width: 10),
+            //     tabButton("Completed", 1),
+            //     const SizedBox(width: 10),
+            //     tabButton("Cancelled", 2),
+            //   ],
+            // ),
 
-            const SizedBox(height: 25),
-
+            // const SizedBox(height: 25),
             Expanded(
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
@@ -78,14 +80,37 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                   return ListView.builder(
                     itemCount: bookingDetails.length,
                     itemBuilder: (context, index) {
-                      final bookingDetail = bookingDetails[index];
+                      final bookingDetail = bookingDetails[index].data();
+                      final bookingDetailss = bookingDetails[index];
+
+                      final status = provider.getDisplayStatus(bookingDetail);
+
+                      Color statusColor;
+
+                      switch (status) {
+                        case 'Confirmed':
+                          statusColor = Colors.orange;
+                          break;
+
+                        case 'Playing':
+                          statusColor = Colors.green;
+                          break;
+
+                        case 'Completed':
+                          statusColor = Colors.grey;
+                          break;
+
+                        default:
+                          statusColor = Colors.grey;
+                      }
+
                       return InkWell(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => BookingDetailsScreen(
-                                bookingDetails: bookingDetail,
+                                bookingDetails: bookingDetailss,
                               ),
                             ),
                           );
@@ -159,23 +184,16 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                                           vertical: 5,
                                         ),
                                         decoration: BoxDecoration(
-                                          color:
-                                              bookingDetail['status'] ==
-                                                  'confirmed'
-                                              ? Colors.green.withOpacity(.12)
-                                              : Colors.red.withOpacity(.12),
+                                          color: statusColor.withOpacity(.12),
                                           borderRadius: BorderRadius.circular(
                                             30,
                                           ),
                                         ),
                                         child: Text(
-                                          bookingDetail['status'],
+                                          status,
                                           style: TextStyle(
-                                            color:
-                                                bookingDetail['status'] ==
-                                                    'confirmed'
-                                                ? Colors.green
-                                                : Colors.red,
+                                            color: statusColor,
+
                                             fontWeight: FontWeight.bold,
                                             fontSize: 12,
                                           ),

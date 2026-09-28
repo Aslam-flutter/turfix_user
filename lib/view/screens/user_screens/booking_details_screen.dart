@@ -85,7 +85,7 @@ class BookingDetailsScreen extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(18),
               child: Image.network(
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwq1O-qC-iZVN_4hkTobZRzKrsWYBbmqrrgls7NwcKUSzQuwJLvMC3xcU&s=10",
+                bookingDetails['turfImage'],
                 height: 200,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -103,7 +103,7 @@ class BookingDetailsScreen extends StatelessWidget {
 
             Text(
               bookingDetails['turfLocation'],
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 16),
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
             ),
 
             const SizedBox(height: 30),

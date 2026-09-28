@@ -195,145 +195,145 @@ class UserHomeScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              sh(10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Select Sport",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {},
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          'See All',
-                                          style: TextStyle(
-                                            color: Colors.grey.shade400,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        Icon(
-                                          Icons.keyboard_arrow_right,
-                                          color: Colors.grey.shade400,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              sh(10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey.shade100,
-                                          borderRadius: BorderRadius.circular(
-                                            16,
-                                          ),
-                                        ),
-                                        child: Icon(
-                                          Icons.sports_soccer,
-                                          size: 50,
-                                        ),
-                                      ),
-                                      sh(6),
-                                      Text(
-                                        'Football',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey.shade100,
-                                          borderRadius: BorderRadius.circular(
-                                            16,
-                                          ),
-                                        ),
-                                        child: Icon(
-                                          Icons.sports_cricket,
-                                          size: 50,
-                                        ),
-                                      ),
-                                      sh(6),
-                                      Text(
-                                        'Cricket',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey.shade100,
-                                          borderRadius: BorderRadius.circular(
-                                            16,
-                                          ),
-                                        ),
-                                        child: SizedBox(
-                                          height: 50,
-                                          child: Image.asset(
-                                            "assets/icons/badminton_icon.png",
-                                          ),
-                                        ),
-                                      ),
-                                      sh(6),
-                                      Text(
-                                        'Badminton',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey.shade100,
-                                          borderRadius: BorderRadius.circular(
-                                            16,
-                                          ),
-                                        ),
-                                        child: Icon(
-                                          Icons.sports_volleyball,
-                                          size: 50,
-                                        ),
-                                      ),
-                                      sh(6),
-                                      Text(
-                                        'Volleyball',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
                               sh(20),
+                              // Row(
+                              //   mainAxisAlignment:
+                              //       MainAxisAlignment.spaceBetween,
+                              //   children: [
+                              //     Text(
+                              //       "Select Sport",
+                              //       style: TextStyle(
+                              //         fontSize: 16,
+                              //         fontWeight: FontWeight.bold,
+                              //       ),
+                              //     ),
+                              //     InkWell(
+                              //       onTap: () {},
+                              //       child: Row(
+                              //         children: [
+                              //           Text(
+                              //             'See All',
+                              //             style: TextStyle(
+                              //               color: Colors.grey.shade400,
+                              //               fontWeight: FontWeight.bold,
+                              //               fontSize: 14,
+                              //             ),
+                              //           ),
+                              //           Icon(
+                              //             Icons.keyboard_arrow_right,
+                              //             color: Colors.grey.shade400,
+                              //           ),
+                              //         ],
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              // sh(10),
+                              // Row(
+                              //   mainAxisAlignment:
+                              //       MainAxisAlignment.spaceBetween,
+                              //   children: [
+                              //     Column(
+                              //       children: [
+                              //         Container(
+                              //           padding: EdgeInsets.all(10),
+                              //           decoration: BoxDecoration(
+                              //             color: Colors.grey.shade100,
+                              //             borderRadius: BorderRadius.circular(
+                              //               16,
+                              //             ),
+                              //           ),
+                              //           child: Icon(
+                              //             Icons.sports_soccer,
+                              //             size: 50,
+                              //           ),
+                              //         ),
+                              //         sh(6),
+                              //         Text(
+                              //           'Football',
+                              //           style: TextStyle(
+                              //             fontWeight: FontWeight.bold,
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //     Column(
+                              //       children: [
+                              //         Container(
+                              //           padding: EdgeInsets.all(10),
+                              //           decoration: BoxDecoration(
+                              //             color: Colors.grey.shade100,
+                              //             borderRadius: BorderRadius.circular(
+                              //               16,
+                              //             ),
+                              //           ),
+                              //           child: Icon(
+                              //             Icons.sports_cricket,
+                              //             size: 50,
+                              //           ),
+                              //         ),
+                              //         sh(6),
+                              //         Text(
+                              //           'Cricket',
+                              //           style: TextStyle(
+                              //             fontWeight: FontWeight.bold,
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //     Column(
+                              //       children: [
+                              //         Container(
+                              //           padding: EdgeInsets.all(10),
+                              //           decoration: BoxDecoration(
+                              //             color: Colors.grey.shade100,
+                              //             borderRadius: BorderRadius.circular(
+                              //               16,
+                              //             ),
+                              //           ),
+                              //           child: SizedBox(
+                              //             height: 50,
+                              //             child: Image.asset(
+                              //               "assets/icons/badminton_icon.png",
+                              //             ),
+                              //           ),
+                              //         ),
+                              //         sh(6),
+                              //         Text(
+                              //           'Badminton',
+                              //           style: TextStyle(
+                              //             fontWeight: FontWeight.bold,
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //     Column(
+                              //       children: [
+                              //         Container(
+                              //           padding: EdgeInsets.all(10),
+                              //           decoration: BoxDecoration(
+                              //             color: Colors.grey.shade100,
+                              //             borderRadius: BorderRadius.circular(
+                              //               16,
+                              //             ),
+                              //           ),
+                              //           child: Icon(
+                              //             Icons.sports_volleyball,
+                              //             size: 50,
+                              //           ),
+                              //         ),
+                              //         sh(6),
+                              //         Text(
+                              //           'Volleyball',
+                              //           style: TextStyle(
+                              //             fontWeight: FontWeight.bold,
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ],
+                              // ),
+                              // sh(20),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -508,7 +508,7 @@ class UserHomeScreen extends StatelessWidget {
                                                           color: Colors.blue,
                                                         ),
                                                         Text(
-                                                          '${turfProvider.getDistance(distance)} away',
+                                                          '$turfProvider.getDistance(distance)',
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,

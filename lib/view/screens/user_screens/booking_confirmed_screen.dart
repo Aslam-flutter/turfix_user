@@ -13,6 +13,7 @@ class BookingConfirmedScreen extends StatelessWidget {
   final String timeDuration;
   final String sport;
   final String amount;
+  final String imageUrl;
   const BookingConfirmedScreen({
     super.key,
     required this.turfName,
@@ -24,6 +25,7 @@ class BookingConfirmedScreen extends StatelessWidget {
     required this.paymentMethod,
     required this.sport,
     required this.timeDuration,
+    required this.imageUrl,
   });
 
   @override
@@ -122,7 +124,7 @@ class BookingConfirmedScreen extends StatelessWidget {
                                   turfLocation,
                                   style: TextStyle(
                                     color: Colors.grey,
-                                    fontSize: 16,
+                                    fontSize: 12,
                                   ),
                                 ),
                               ],

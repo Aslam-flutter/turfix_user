@@ -88,6 +88,7 @@ class BookingScreen extends StatelessWidget {
                       turfId: turf.id,
                       turfName: turf['turfName'],
                       customerName: customerName,
+                      turfOwnerId: turf['ownerId'],
                       turfImage: turf['turfImages'][0],
                       turfLocation: turf['location'],
                       userId: FirebaseAuth.instance.currentUser!.uid,
@@ -118,6 +119,7 @@ class BookingScreen extends StatelessWidget {
                           sport: 'Football',
                           time: time,
                           timeDuration: timeDuration,
+                          imageUrl: turf['turfImages'][0],
                         ),
                       ),
                       (route) => false,
@@ -206,7 +208,7 @@ class BookingScreen extends StatelessWidget {
 
                       Text(
                         turf['location'],
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                        style: TextStyle(color: Colors.grey, fontSize: 12),
                       ),
                     ],
                   ),
