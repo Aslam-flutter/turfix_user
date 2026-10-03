@@ -410,8 +410,10 @@ class UserHomeScreen extends StatelessWidget {
                                     itemBuilder: (context, index) {
                                       final turf =
                                           turfProvider.nearbyTurfs[index];
-                                      final distance =
-                                          turf['distance'] as double;
+                                      final dist = turf['distance'] as double;
+                                      final distance = turfProvider.getDistance(
+                                        dist,
+                                      );
                                       return Row(
                                         children: [
                                           sw(16),
@@ -508,7 +510,7 @@ class UserHomeScreen extends StatelessWidget {
                                                           color: Colors.blue,
                                                         ),
                                                         Text(
-                                                          '$turfProvider.getDistance(distance)',
+                                                          distance,
                                                           style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,

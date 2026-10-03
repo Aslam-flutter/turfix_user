@@ -6,6 +6,7 @@ import 'package:turfix/core/constants/app_fuctions.dart';
 import 'package:turfix/model/date_booking_model.dart';
 import 'package:turfix/view/screens/user_screens/booking_screen.dart';
 import 'package:turfix/view_model/bookig_provider.dart';
+import 'package:turfix/view_model/favorite_provider.dart';
 
 class TurfDetailsScreen extends StatelessWidget {
   final QueryDocumentSnapshot<Map<String, dynamic>> turfDetails;
@@ -66,7 +67,9 @@ class TurfDetailsScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          circleButton(Icons.arrow_back, () {}),
+                          circleButton(Icons.arrow_back, () {
+                            Navigator.pop(context);
+                          }),
 
                           Row(
                             children: [
@@ -74,7 +77,35 @@ class TurfDetailsScreen extends StatelessWidget {
 
                               const SizedBox(width: 12),
 
-                              circleButton(Icons.favorite_border, () {}),
+                              Consumer<FavoriteProvider>(
+                                builder: (context, provider, child) {
+                                  final isFavorite = provider.isFavorite(
+                                    turfDetails.id,
+                                  );
+
+                                  return Container(
+                                    padding: EdgeInsets.all(3.5),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(200),
+
+                                      color: Colors.white,
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () {
+                                        provider.toggleFavorite(turfDetails.id);
+                                      },
+                                      icon: Icon(
+                                        isFavorite
+                                            ? Icons.favorite
+                                            : Icons.favorite_border,
+                                        color: isFavorite
+                                            ? Colors.red
+                                            : Colors.black87,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ],
                           ),
                         ],
@@ -388,7 +419,15 @@ class TurfDetailsScreen extends StatelessWidget {
 
                               final status = data['status'];
 
-                              final isAvailable = status == 'available';
+                              // Current time
+                              final now = DateTime.now();
+
+                              // Has this slot already finished?
+                              final isPastSlot = !endAt.isAfter(now);
+
+                              // Firebase availability + time availability
+                              final isAvailable =
+                                  status == 'available' && !isPastSlot;
 
                               final isSelected = provider.isSlotSelected(
                                 slotDocument.id,
@@ -398,11 +437,20 @@ class TurfDetailsScreen extends StatelessWidget {
                                   .map((doc) => doc.id)
                                   .toList();
 
+                              // Only slots that are available AND not expired
                               final availableSlotIds = slots
-                                  .where(
-                                    (doc) =>
-                                        doc.data()['status'] == 'available',
-                                  )
+                                  .where((doc) {
+                                    final slotData = doc.data();
+
+                                    final slotStatus = slotData['status'];
+
+                                    final slotEnd =
+                                        (slotData['endAt'] as Timestamp)
+                                            .toDate();
+
+                                    return slotStatus == 'available' &&
+                                        slotEnd.isAfter(now);
+                                  })
                                   .map((doc) => doc.id)
                                   .toList();
 
@@ -416,12 +464,12 @@ class TurfDetailsScreen extends StatelessWidget {
 
                               return TimeSlotCard(
                                 startTime: DateFormat('h:mm a').format(startAt),
-
                                 endTime: DateFormat('h:mm a').format(endAt),
-
                                 price: '₹${data['price']}',
 
-                                status: isAvailable
+                                status: isPastSlot
+                                    ? SlotStatus.unavailable
+                                    : isAvailable
                                     ? SlotStatus.available
                                     : SlotStatus.booked,
 
@@ -445,7 +493,7 @@ class TurfDetailsScreen extends StatelessWidget {
                 },
               ),
             ),
-            SizedBox(height: 50),
+            SizedBox(height: 80),
           ],
         ),
       ),

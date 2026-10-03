@@ -5,6 +5,7 @@ import 'package:turfix/firebase_options.dart';
 import 'package:turfix/view/auth/splash_screen.dart';
 import 'package:turfix/view_model/bookig_provider.dart';
 import 'package:turfix/view_model/common_provider.dart';
+import 'package:turfix/view_model/favorite_provider.dart';
 import 'package:turfix/view_model/location_provider.dart';
 import 'package:turfix/view_model/nearby_turf_provider.dart';
 import 'package:turfix/view_model/payment_provider.dart';
@@ -23,6 +24,9 @@ void main() async {
         ChangeNotifierProvider(create: (context) => PaymentProvider()),
         ChangeNotifierProvider(create: (context) => LocationProvider()),
         ChangeNotifierProvider(create: (context) => NearbyTurfProvider()),
+        ChangeNotifierProvider(
+          create: (context) => FavoriteProvider()..loadFavorites(),
+        ),
       ],
       child: const MyApp(),
     ),

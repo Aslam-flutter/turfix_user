@@ -272,6 +272,7 @@ class BookingProvider extends ChangeNotifier {
     required String userId,
     required String sport,
     required String paymentMethod,
+    required int bookingCount,
   }) async {
     final firestore = FirebaseFirestore.instance;
 
@@ -286,6 +287,8 @@ class BookingProvider extends ChangeNotifier {
 
     // Create booking document reference
     final bookingRef = firestore.collection('bookings').doc();
+
+    final turfRef = firestore.collection('turfs').doc(turfId);
 
     // Create references to selected slots
     final slotRefs = selectedSlotIds.map((slotId) {
@@ -331,6 +334,7 @@ class BookingProvider extends ChangeNotifier {
       // 3. CREATE BOOKING
       // -----------------------------------------
 
+      transaction.update(turfRef, {'bookingCount': FieldValue.increment(1)});
       transaction.set(bookingRef, {
         'bookingId': bookingRef.id,
         'turfId': turfId,

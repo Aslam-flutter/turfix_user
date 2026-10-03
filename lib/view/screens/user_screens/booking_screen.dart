@@ -94,6 +94,7 @@ class BookingScreen extends StatelessWidget {
                       userId: FirebaseAuth.instance.currentUser!.uid,
                       sport: 'football',
                       paymentMethod: provider.selectedPaymentMethod,
+                      bookingCount: turf['bookingCount'],
                     );
 
                     if (!context.mounted) return;
