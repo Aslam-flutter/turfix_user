@@ -156,6 +156,7 @@ class SearchTurfScreen extends StatelessWidget {
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('turfs')
+                    .where('isVerified', isEqualTo: 1)
                     .snapshots(),
                 builder: (context, asyncSnapshot) {
                   if (asyncSnapshot.connectionState ==
