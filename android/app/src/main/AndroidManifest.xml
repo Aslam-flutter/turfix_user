@@ -5,7 +5,7 @@
 
 
     <application
-        android:label="turfix"
+        android:label="Turfix"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
