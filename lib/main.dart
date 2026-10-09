@@ -9,6 +9,7 @@ import 'package:turfix/view_model/favorite_provider.dart';
 import 'package:turfix/view_model/location_provider.dart';
 import 'package:turfix/view_model/nearby_turf_provider.dart';
 import 'package:turfix/view_model/payment_provider.dart';
+import 'package:turfix/view_model/search_turf_provider.dart';
 import 'package:turfix/view_model/slot_provider.dart';
 
 void main() async {
@@ -27,6 +28,7 @@ void main() async {
         ChangeNotifierProvider(
           create: (context) => FavoriteProvider()..loadFavorites(),
         ),
+        ChangeNotifierProvider(create: (_) => SearchTurfProvider()),
       ],
       child: const MyApp(),
     ),

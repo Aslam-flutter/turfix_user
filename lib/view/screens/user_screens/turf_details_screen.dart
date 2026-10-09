@@ -332,14 +332,19 @@ class TurfDetailsScreen extends StatelessWidget {
             SizedBox(
               height: 110,
               child: Consumer<BookingProvider>(
-                builder: (_, provider, __) {
+                builder: (context, provider, _) {
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: provider.dates.length,
-                    itemBuilder: (_, index) {
+                    itemBuilder: (context, index) {
                       return DateCard(
+                        // key: ValueKey(
+                        //   '${provider.dates[index].date}_${provider.dates[index].selected}',
+                        // ),
                         bookingDate: provider.dates[index],
-                        onTap: () => provider.selectDate(index),
+                        onTap: () {
+                          provider.selectDate(index);
+                        },
                       );
                     },
                   );
@@ -376,7 +381,8 @@ class TurfDetailsScreen extends StatelessWidget {
                         .snapshots(),
 
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
+                      if (snapshot.connectionState == ConnectionState.waiting &&
+                          !snapshot.hasData) {
                         return const Center(child: CircularProgressIndicator());
                       }
 
@@ -497,7 +503,7 @@ class TurfDetailsScreen extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
 
       floatingActionButton: Consumer<BookingProvider>(
         builder: (context, provider, _) {
@@ -505,7 +511,7 @@ class TurfDetailsScreen extends StatelessWidget {
 
           return SizedBox(
             width: MediaQuery.of(context).size.width - 32,
-            height: 56,
+            height: 52,
             child: FloatingActionButton.extended(
               onPressed: !hasSelection
                   ? null

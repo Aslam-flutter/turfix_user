@@ -24,9 +24,7 @@ class UserProfileScreen extends StatelessWidget {
               .get(),
           builder: (context, asyncSnapshot) {
             if (asyncSnapshot.connectionState == ConnectionState.waiting) {
-              return Expanded(
-                child: Center(child: CircularProgressIndicator()),
-              );
+              return Center(child: CircularProgressIndicator());
             }
 
             final userDetails = asyncSnapshot.data;

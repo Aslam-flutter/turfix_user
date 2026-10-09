@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:turfix/core/constants/app_constants.dart';
 import 'package:turfix/view/screens/user_screens/turf_details_screen.dart';
+import 'package:turfix/view_model/search_turf_provider.dart';
 import 'package:turfix/widgets/custom_sized_box.dart';
 
 class SearchTurfScreen extends StatelessWidget {
@@ -36,6 +38,9 @@ class SearchTurfScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: TextField(
+                onChanged: (value) {
+                  context.read<SearchTurfProvider>().updateSearch(value);
+                },
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -57,99 +62,144 @@ class SearchTurfScreen extends StatelessWidget {
               ),
             ),
             sh(16),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  sw(16),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: AppConstants.darkGreen,
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Text(
-                      'All',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  sw(6),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey.shade400),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Text(
-                      'Football',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  sw(6),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey.shade400),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Text(
-                      'Cricket',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  sw(6),
+            Consumer<SearchTurfProvider>(
+              builder: (context, provider, _) {
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: provider.sports.map((sport) {
+                      final isSelected = provider.selectedSport == sport;
 
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey.shade400),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Text(
-                      'Volleyball',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(50),
+                          onTap: () => provider.selectSport(sport),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? AppConstants.darkGreen
+                                  : Colors.white,
+                              border: Border.all(
+                                color: isSelected
+                                    ? AppConstants.darkGreen
+                                    : Colors.grey.shade400,
+                              ),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: Text(
+                              sport,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: isSelected ? Colors.white : Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
                   ),
-                  sw(6),
-
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey.shade400),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Text(
-                      'Badminton',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                );
+              },
             ),
+            // SingleChildScrollView(
+            //   scrollDirection: Axis.horizontal,
+            //   child: Row(
+            //     children: [
+            //       sw(16),
+            //       Container(
+            //         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            //         decoration: BoxDecoration(
+            //           color: AppConstants.darkGreen,
+            //           borderRadius: BorderRadius.circular(50),
+            //         ),
+            //         child: Text(
+            //           'All',
+            //           style: TextStyle(
+            //             fontSize: 14,
+            //             fontWeight: FontWeight.bold,
+            //             color: Colors.white,
+            //           ),
+            //         ),
+            //       ),
+            //       sw(6),
+            //       Container(
+            //         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            //         decoration: BoxDecoration(
+            //           color: Colors.white,
+            //           border: Border.all(color: Colors.grey.shade400),
+            //           borderRadius: BorderRadius.circular(50),
+            //         ),
+            //         child: Text(
+            //           'Football',
+            //           style: TextStyle(
+            //             fontSize: 14,
+            //             fontWeight: FontWeight.bold,
+            //             color: Colors.black,
+            //           ),
+            //         ),
+            //       ),
+            //       sw(6),
+            //       Container(
+            //         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            //         decoration: BoxDecoration(
+            //           color: Colors.white,
+            //           border: Border.all(color: Colors.grey.shade400),
+            //           borderRadius: BorderRadius.circular(50),
+            //         ),
+            //         child: Text(
+            //           'Cricket',
+            //           style: TextStyle(
+            //             fontSize: 14,
+            //             fontWeight: FontWeight.bold,
+            //             color: Colors.black,
+            //           ),
+            //         ),
+            //       ),
+            //       sw(6),
+
+            //       Container(
+            //         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            //         decoration: BoxDecoration(
+            //           color: Colors.white,
+            //           border: Border.all(color: Colors.grey.shade400),
+            //           borderRadius: BorderRadius.circular(50),
+            //         ),
+            //         child: Text(
+            //           'Volleyball',
+            //           style: TextStyle(
+            //             fontSize: 14,
+            //             fontWeight: FontWeight.bold,
+            //             color: Colors.black,
+            //           ),
+            //         ),
+            //       ),
+            //       sw(6),
+
+            //       Container(
+            //         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            //         decoration: BoxDecoration(
+            //           color: Colors.white,
+            //           border: Border.all(color: Colors.grey.shade400),
+            //           borderRadius: BorderRadius.circular(50),
+            //         ),
+            //         child: Text(
+            //           'Badminton',
+            //           style: TextStyle(
+            //             fontSize: 14,
+            //             fontWeight: FontWeight.bold,
+            //             color: Colors.black,
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             sh(20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -163,7 +213,44 @@ class SearchTurfScreen extends StatelessWidget {
                       ConnectionState.waiting) {
                     return SizedBox(child: CircularProgressIndicator());
                   }
-                  final turfs = asyncSnapshot.data!.docs;
+                  final allTurfs = asyncSnapshot.data!.docs;
+
+                  final provider = context.watch<SearchTurfProvider>();
+
+                  final turfs = allTurfs.where((turf) {
+                    final data = turf.data();
+
+                    final sportTypes = List<String>.from(
+                      data['sportTypes'] ?? [],
+                    );
+
+                    final matchesSport =
+                        provider.selectedSport == 'All' ||
+                        sportTypes.any(
+                          (sport) =>
+                              sport.toLowerCase() ==
+                              provider.selectedSport.toLowerCase(),
+                        );
+
+                    final name = (data['turfName'] ?? '')
+                        .toString()
+                        .toLowerCase();
+                    final location = (data['location'] ?? '')
+                        .toString()
+                        .toLowerCase();
+
+                    final matchesSearch =
+                        provider.searchQuery.isEmpty ||
+                        name.contains(provider.searchQuery) ||
+                        location.contains(provider.searchQuery) ||
+                        sportTypes.any(
+                          (sport) => sport.toLowerCase().contains(
+                            provider.searchQuery,
+                          ),
+                        );
+
+                    return matchesSport && matchesSearch;
+                  }).toList();
 
                   if (turfs.isEmpty) {
                     return SizedBox(child: Text('No turf detaiis found'));

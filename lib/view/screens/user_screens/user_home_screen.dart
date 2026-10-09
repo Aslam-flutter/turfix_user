@@ -45,17 +45,9 @@ class UserHomeScreen extends StatelessWidget {
                                 text: TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: 'Hello, ',
+                                      text: 'Hello',
                                       style: TextStyle(
                                         fontSize: 20,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: 'Aslam',
-                                      style: TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                       ),
                                     ),
