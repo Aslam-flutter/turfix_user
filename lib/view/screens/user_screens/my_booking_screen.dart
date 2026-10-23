@@ -75,8 +75,11 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                   final bookingDetails = snapshot.data!.docs;
 
                   if (bookingDetails.isEmpty) {
-                    return Text('No booking details found');
+                    return const Center(
+                      child: Text('No booking details found'),
+                    );
                   }
+
                   return ListView.builder(
                     itemCount: bookingDetails.length,
                     itemBuilder: (context, index) {

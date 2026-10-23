@@ -79,66 +79,121 @@ class BookingScreen extends StatelessWidget {
               width: double.infinity,
               height: 55,
               child: ElevatedButton(
-                onPressed: () async {
-                  provider.load(true);
-                  try {
-                    final providerr = context.read<BookingProvider>();
+                onPressed: provider.isLoading
+                    ? null
+                    : () async {
+                        final user = FirebaseAuth.instance.currentUser;
 
-                    final bookingId = await providerr.bookSlots(
-                      turfId: turf.id,
-                      turfName: turf['turfName'],
-                      customerName: customerName,
-                      turfOwnerId: turf['ownerId'],
-                      turfImage: turf['turfImages'][0],
-                      turfLocation: turf['location'],
-                      userId: FirebaseAuth.instance.currentUser!.uid,
-                      sport: 'football',
-                      paymentMethod: provider.selectedPaymentMethod,
-                      bookingCount: turf['bookingCount'],
-                    );
+                        if (user == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please log in first.'),
+                            ),
+                          );
+                          return;
+                        }
 
-                    if (!context.mounted) return;
+                        final bookingProvider = context.read<BookingProvider>();
+                        final paymentMethod = provider.selectedPaymentMethod;
 
-                    provider.selectedPaymentMethod !=
-                            PaymentMethod.payAtVenue.name
-                        ? paymentProvider.handleOnlinePayment(
+                        if (bookingProvider.selectedDate == null ||
+                            bookingProvider.selectedSlotIds.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Please select a date and time slot.',
+                              ),
+                            ),
+                          );
+                          return;
+                        }
+
+                        provider.load(true);
+
+                        try {
+                          String bookingId;
+                          final isPayAtVenue =
+                              paymentMethod == PaymentMethod.payAtVenue.name;
+
+                          if (isPayAtVenue) {
+                            // Preserve your existing Pay at Venue booking flow.
+                            bookingId = await bookingProvider.bookSlots(
+                              turfId: turf.id,
+                              turfName: turf['turfName'],
+                              customerName: customerName,
+                              turfOwnerId: turf['ownerId'],
+                              turfImage: (turf['turfImages'] as List).first,
+                              turfLocation: turf['location'],
+                              userId: user.uid,
+                              sport: 'football',
+                              paymentMethod: paymentMethod,
+                              bookingCount:
+                                  (turf['bookingCount'] as num?)?.toInt() ?? 0,
+                              isDemoPayment: false,
+                            );
+                          } else {
+                            // Real Razorpay checkout.
+                            final result = await paymentProvider
+                                .handleOnlinePayment(
+                                  context: context,
+                                  method: paymentMethod,
+                                  turfId: turf.id,
+                                  dateId: bookingProvider.formatDate(date),
+                                  slotIds: List<String>.from(
+                                    bookingProvider.selectedSlotIds,
+                                  ),
+                                  turfName: turf['turfName'],
+                                  turfOwnerId: turf['ownerId'],
+                                  turfImage: (turf['turfImages'] as List).first,
+                                  turfLocation: turf['location'],
+                                  customerName: customerName,
+                                  sport: 'football',
+                                );
+
+                            if (!context.mounted) return;
+
+                            if (result == null || result['bookingId'] == null) {
+                              return;
+                            }
+
+                            bookingId = result['bookingId'] as String;
+                          }
+
+                          if (!context.mounted) return;
+
+                          Navigator.pushAndRemoveUntil(
                             context,
-                            provider.selectedPaymentMethod,
-                          )
-                        : null;
+                            MaterialPageRoute(
+                              builder: (_) => BookingConfirmedScreen(
+                                turfName: turf['turfName'],
+                                turfLocation: turf['location'],
+                                bookingId: bookingId,
+                                paymentMethod: paymentMethod,
+                                date: selectedDate,
+                                amount: totalAmount.toStringAsFixed(0),
+                                sport: 'Football',
+                                time: time,
+                                timeDuration: timeDuration,
+                                imageUrl: (turf['turfImages'] as List).first,
+                              ),
+                            ),
+                            (route) => false,
+                          );
+                        } catch (e) {
+                          if (!context.mounted) return;
 
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BookingConfirmedScreen(
-                          turfName: turf['turfName'],
-                          turfLocation: turf['location'],
-                          bookingId: bookingId,
-                          paymentMethod: provider.selectedPaymentMethod,
-                          date: selectedDate,
-                          amount: totalAmount.toStringAsFixed(0),
-                          sport: 'Football',
-                          time: time,
-                          timeDuration: timeDuration,
-                          imageUrl: turf['turfImages'][0],
-                        ),
-                      ),
-                      (route) => false,
-                    );
-                  } catch (e) {
-                    if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                e.toString().replaceFirst('Exception: ', ''),
+                              ),
+                            ),
+                          );
+                        } finally {
+                          provider.load(false);
+                        }
+                      },
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          e.toString().replaceFirst('Exception: ', ''),
-                        ),
-                      ),
-                    );
-                  }
-
-                  provider.load(false);
-                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: green,
                   elevation: 0,

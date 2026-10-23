@@ -11,7 +11,6 @@ class BookingProvider extends ChangeNotifier {
   // --------------------------------------------------
 
   DateTime? selectedDate;
-
   int selectedDateIndex = 0;
 
   // --------------------------------------------------
@@ -273,6 +272,7 @@ class BookingProvider extends ChangeNotifier {
     required String sport,
     required String paymentMethod,
     required int bookingCount,
+    bool isDemoPayment = false,
   }) async {
     final firestore = FirebaseFirestore.instance;
 
@@ -352,6 +352,8 @@ class BookingProvider extends ChangeNotifier {
         'totalAmount': totalPrice,
         'sport': sport,
         'paymentMethod': paymentMethod,
+        'paymentStatus': isDemoPayment ? 'demo_paid' : 'unpaid',
+        'isDemo': isDemoPayment,
         'status': 'confirmed',
         'createdAt': FieldValue.serverTimestamp(),
       });

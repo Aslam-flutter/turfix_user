@@ -19,8 +19,8 @@ class UserHomeScreen extends StatelessWidget {
     return SlotMaintenance(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          child: SafeArea(
             child: Column(
               children: [
                 Container(

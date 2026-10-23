@@ -12,7 +12,7 @@ class UserMainScreen extends StatefulWidget {
 }
 
 class _UserMainScreenState extends State<UserMainScreen> {
-  int currentIndex = 0;
+  static int currentIndex = 0;
 
   final List<Widget> pages = const [
     Center(child: UserHomeScreen()),

@@ -133,6 +133,34 @@ class BookingConfirmedScreen extends StatelessWidget {
                         ),
                       ),
                       const Divider(endIndent: 14, indent: 14),
+                      if (paymentMethod != PaymentMethod.payAtVenue.name)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 8,
+                          ),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.amber.shade50,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Text(
+                              'DEMO PAYMENT — NOT A REAL TRANSACTION',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.brown,
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+
                       const SizedBox(height: 10),
                       Column(
                         children: [
